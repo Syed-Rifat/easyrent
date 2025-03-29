@@ -1,0 +1,30 @@
+# Database configuration
+database/config.php
+
+# Environment files
+.env
+.env.*
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
+error_log
+access_log
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+
+# Uploaded files
+assets/uploads/*
+!assets/uploads/.gitkeep 
