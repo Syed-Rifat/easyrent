@@ -32,49 +32,23 @@ $recent_properties_query = "SELECT p.id, p.title, p.price, p.location, p.status,
                            JOIN users u ON p.landlord_id = u.id 
                            ORDER BY p.created_at DESC LIMIT 5";
 $recent_properties = $conn->query($recent_properties_query);
+
+// Get recent bookings
+$recent_bookings_query = "SELECT b.id, b.start_date, b.end_date, b.total_amount, b.status, 
+                         p.title as property_title, p.location as property_location,
+                         u.full_name as tenant_name
+                         FROM bookings b
+                         JOIN properties p ON b.property_id = p.id
+                         JOIN users u ON b.tenant_id = u.id
+                         ORDER BY b.created_at DESC LIMIT 10";
+$recent_bookings = $conn->query($recent_bookings_query);
 ?>
 
 <?php include_once "../includes/header.php"; ?>
 
-
 <div class="container-fluid my-5">
     <div class="row">
-        <!-- Sidebar -->
-        <div class="col-md-3">
-            <div class="card mb-4">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Admin Dashboard</h5>
-                </div>
-                <div class="card-body text-center mb-3">
-                    <i class="fas fa-user-circle fa-5x text-primary mb-3"></i>
-                    <h5><?php echo htmlspecialchars($admin_name); ?></h5>
-                    <p class="text-muted">Administrator</p>
-                </div>
-                <div class="list-group list-group-flush">
-                    <a href="dashboard.php" class="list-group-item list-group-item-action active">
-                        <i class="fas fa-tachometer-alt me-2"></i> Dashboard
-                    </a>
-                    <a href="users.php" class="list-group-item list-group-item-action">
-                        <i class="fas fa-users me-2"></i> Manage Users
-                    </a>
-                    <a href="properties.php" class="list-group-item list-group-item-action">
-                        <i class="fas fa-home me-2"></i> Manage Properties
-                    </a>
-                    <a href="bookings.php" class="list-group-item list-group-item-action">
-                        <i class="fas fa-calendar-check me-2"></i> Manage Bookings
-                    </a>
-                    <a href="reports.php" class="list-group-item list-group-item-action">
-                        <i class="fas fa-chart-bar me-2"></i> Reports
-                    </a>
-                    <a href="settings.php" class="list-group-item list-group-item-action">
-                        <i class="fas fa-cog me-2"></i> Settings
-                    </a>
-                    <a href="../auth/logout.php" class="list-group-item list-group-item-action text-danger">
-                        <i class="fas fa-sign-out-alt me-2"></i> Logout
-                    </a>
-                </div>
-            </div>
-        </div>
+        <?php include_once "includes/sidebar.php"; ?>
         
         <!-- Main Content -->
         <div class="col-md-9">
@@ -221,6 +195,64 @@ $recent_properties = $conn->query($recent_properties_query);
                         </div>
                         <div class="card-footer text-end">
                             <a href="properties.php" class="btn btn-sm btn-primary">View All Properties</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recent Bookings -->
+            <div class="row">
+                <div class="col-12 mb-4">
+                    <div class="card">
+                        <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Recent Bookings</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Booking ID</th>
+                                            <th>Property</th>
+                                            <th>Location</th>
+                                            <th>Tenant</th>
+                                            <th>Start Date</th>
+                                            <th>End Date</th>
+                                            <th>Total Amount</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php if ($recent_bookings->num_rows > 0): ?>
+                                            <?php while ($booking = $recent_bookings->fetch_assoc()): ?>
+                                                <tr>
+                                                    <td><?php echo $booking['id']; ?></td>
+                                                    <td><?php echo htmlspecialchars($booking['property_title']); ?></td>
+                                                    <td><?php echo htmlspecialchars($booking['property_location']); ?></td>
+                                                    <td><?php echo htmlspecialchars($booking['tenant_name']); ?></td>
+                                                    <td><?php echo date('d M Y', strtotime($booking['start_date'])); ?></td>
+                                                    <td><?php echo date('d M Y', strtotime($booking['end_date'])); ?></td>
+                                                    <td>৳<?php echo number_format($booking['total_amount']); ?></td>
+                                                    <td>
+                                                        <span class="badge <?php echo ($booking['status'] == 'confirmed') ? 'bg-success' : 
+                                                                                (($booking['status'] == 'pending') ? 'bg-warning' : 
+                                                                                (($booking['status'] == 'cancelled') ? 'bg-danger' : 'bg-secondary')); ?>">
+                                                            <?php echo ucfirst($booking['status']); ?>
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            <?php endwhile; ?>
+                                        <?php else: ?>
+                                            <tr>
+                                                <td colspan="8" class="text-center">No recent bookings</td>
+                                            </tr>
+                                        <?php endif; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="card-footer text-end">
+                            <a href="bookings.php" class="btn btn-info">View All Bookings</a>
                         </div>
                     </div>
                 </div>

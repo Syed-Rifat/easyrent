@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS users (
     phone VARCHAR(20),
     address TEXT,
     user_type ENUM('admin', 'landlord', 'tenant') NOT NULL,
+    status ENUM('active', 'inactive') NOT NULL DEFAULT 'active',
     profile_image VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -90,6 +91,17 @@ CREATE TABLE IF NOT EXISTS reviews (
     FOREIGN KEY (tenant_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- Create favorites table
+CREATE TABLE IF NOT EXISTS favorites (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    tenant_id INT NOT NULL,
+    property_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (tenant_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (property_id) REFERENCES properties(id) ON DELETE CASCADE,
+    UNIQUE KEY unique_favorite (tenant_id, property_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 -- Create messages table
 CREATE TABLE IF NOT EXISTS messages (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -102,6 +114,18 @@ CREATE TABLE IF NOT EXISTS messages (
     FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (receiver_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Create system_settings table
+CREATE TABLE system_settings (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    site_name VARCHAR(255) NOT NULL DEFAULT 'EasyRent',
+    site_email VARCHAR(255) NOT NULL,
+    maintenance_mode TINYINT(1) NOT NULL DEFAULT 0,
+    enable_notifications TINYINT(1) NOT NULL DEFAULT 1,
+    enable_email_notifications TINYINT(1) NOT NULL DEFAULT 1,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
 
 -- Insert demo admin user
 INSERT INTO users (full_name, email, password, user_type) VALUES 
@@ -124,4 +148,10 @@ INSERT INTO properties (landlord_id, title, description, property_type, price, b
 (2, 'Cozy Studio in Dhanmondi', 'Perfect studio apartment for students or young professionals.', 'apartment', 20000.00, 1, 1, 700.00, 'Dhanmondi, Dhaka', 'House #15, Road #2, Dhanmondi, Dhaka-1209', 'WiFi, Balcony, Kitchen, Washing Machine', 'assets/images/properties/property2.jpg', TRUE),
 (2, 'Family House in Uttara', 'Spacious house ideal for families, close to schools and shopping centers.', 'house', 35000.00, 4, 3, 2200.00, 'Uttara, Dhaka', 'House #7, Sector #3, Uttara, Dhaka-1230', 'Garden, Garage, WiFi, Air Conditioning, Backup Generator', 'assets/images/properties/property3.jpg', TRUE),
 (2, 'Office Space in Banani', 'Modern office space perfect for startups and small businesses.', 'office', 45000.00, 0, 2, 1000.00, 'Banani, Dhaka', 'Plot #17, Road #11, Banani, Dhaka-1213', 'Reception Area, Conference Room, High Speed Internet, Parking', 'assets/images/properties/property4.jpg', FALSE),
-(2, 'Bachelor Pad in Mirpur', 'Affordable room for bachelors with basic amenities.', 'room', 8000.00, 1, 1, 300.00, 'Mirpur, Dhaka', 'House #12, Road #5, Mirpur-10, Dhaka-1216', 'WiFi, Shared Kitchen, Water Supply', 'assets/images/properties/property5.jpg', FALSE); 
+(2, 'Bachelor Pad in Mirpur', 'Affordable room for bachelors with basic amenities.', 'room', 8000.00, 1, 1, 300.00, 'Mirpur, Dhaka', 'House #12, Road #5, Mirpur-10, Dhaka-1216', 'WiFi, Shared Kitchen, Water Supply', 'assets/images/properties/property5.jpg', FALSE);
+
+-- Add status column to users table
+ALTER TABLE users ADD COLUMN status ENUM('active', 'inactive') NOT NULL DEFAULT 'active';
+
+-- Insert default settings
+INSERT INTO system_settings (id, site_name, site_email) VALUES (1, 'EasyRent', 'admin@easyrent.com');

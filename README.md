@@ -23,7 +23,7 @@ A modern web application for house rental management built with PHP and MySQL.
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/easyrent.git
+git clone https://github.com/Syed-Rifat/easyrent.git
 ```
 
 2. Create a MySQL database named `easyrent`
@@ -74,5 +74,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Contact
 
-Your Name - your.email@example.com
-Project Link: [https://github.com/yourusername/easyrent](https://github.com/yourusername/easyrent)
+Email - syedrifat411@gmail.com
+Project Link: [https://github.com/Syed-Rifat/easyrent](https://github.com/Syed-Rifat/easyrent)

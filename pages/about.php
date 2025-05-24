@@ -120,7 +120,7 @@ $base_path = "../";
                                 <div class="card h-100 border-0 shadow-sm">
                                     <div class="card-body">
                                         <i class="fas fa-user-circle fa-5x text-primary mb-3"></i>
-                                        <h5>Md. Rashad Ahmed</h5>
+                                        <h5>Syed Rifat</h5>
                                         <p class="text-muted">CEO & Founder</p>
                                     </div>
                                 </div>
@@ -129,7 +129,7 @@ $base_path = "../";
                                 <div class="card h-100 border-0 shadow-sm">
                                     <div class="card-body">
                                         <i class="fas fa-user-circle fa-5x text-primary mb-3"></i>
-                                        <h5>Faria Rahman</h5>
+                                        <h5>Mahfuja Khatun</h5>
                                         <p class="text-muted">Chief Technology Officer</p>
                                     </div>
                                 </div>
