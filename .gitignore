@@ -27,4 +27,12 @@ access_log
 
 # Uploaded files
 assets/uploads/*
-!assets/uploads/.gitkeep 
+!assets/uploads/.gitkeep
+
+# Backup files
+backups/*
+!backups/.gitkeep
+
+# Log files
+logs/*
+!logs/.gitkeep 
