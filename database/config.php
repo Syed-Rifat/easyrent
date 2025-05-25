@@ -1,8 +1,8 @@
 <?php
 // Database Configuration
 $servername = "localhost";
-$username = "your_username";  // Your database username
-$password = "your_password";  // Your database password
+$username = "root";  // Your database username
+$password = "";      // Your database password
 $dbname = "easyrent";
 
 // Create connection

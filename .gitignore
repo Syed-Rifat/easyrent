@@ -1,6 +1,3 @@
-# Database configuration
-database/config.php
-
 # Environment files
 .env
 .env.*
